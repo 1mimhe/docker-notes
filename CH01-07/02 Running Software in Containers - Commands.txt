@@ -1,0 +1,75 @@
+$ docker run --detach \
+--name web nginx:latest
+* create and run a new container from an image.
+* --detach, -d: means that the container will run in the background, without being attached to any input or output stream.
+* --name: Assign a name to the container.
+
+$ docker run --interactive --tty \
+--link web:web \
+--name web_test \
+busybox:1.29 /bin/sh
+* --interactive: tells Docker to keep the standard input stream (stdin) open for the container even if no terminal is attached.
+* --tty: tells Docker to allocate a virtual terminal for the container, which will allow you to pass signals to the container.
+** combined flag: -it
+* --link: is a legacy feature of Docker. It may eventually be removed.
+* --link <name or id>:alias: Where name is the name of the container we're linking to and alias is an alias for the link name. That alias is used shortly. Alias isn't required.
+* The link is unidirectional. Just The source container can access the target container.
+
+$ docker run -d -P training/webapp python app.py
+* -P: was used to automatically map any network port inside it to a random high port within an ephemeral port range on your Docker host. Ex: 49155->5000
+* -p: in CH05
+
+$ docker ps
+* which containers are currently running.
+* -a: it show all conatiners.
+* -q: just show truncted IDs.
+* --no-trunc: get the full container IDs.
+* --latest: the last created container.
+
+$ docker logs <container-name>
+* examine the logs for each container.
+* -f: that will display the logs and then continue watching and updating the display with changes to the log as they occur.
+
+$ docker start <container-name>
+$ docker stop <container-name>
+$ docker restart <container-name>
+
+$ docker exec <container-name> <command>
+* execute a command in a running container.
+
+$ docker create --pid host busybox:latest ps
+* create a new container without starting it.
+* --pid host: you can optionally create containers without their own PID namespace.
+
+$ docker rename <container-name> <new-name>
+* Rename a container.
+
+*** The first 12 characters of the container ID is unique. so we can use it instead of container name in commands.
+
+$ docker inspect --format "{{.State.Running}}" <container-name>
+* will display all the metadata (a JSON document) that Docker maintains for a container.
+* --format: Format output using a custom template (https://docs.docker.com/engine/cli/formatting/)
+* Example: --format 'table {{.Names}}\t{{.Image}}\t{{.Status}}'
+--format 'ID: {{.Id}} Status: {{.State.Status}}'
+
+$ docker container diff <container-name>
+* Inspect changes to files or directories on a container's filesystem.
+
+$ docker run --env MY_ENVIRONMENT_VAR="this is a test" \
+busybox:1.29 env
+* --env, -e: can be used to inject any environment variable.
+
+$ docker run -d --name backoff-detector --restart always busybox:1.29 date
+* --restart always: Always restart the container regardless of the condition after exiting. But Docker uses an exponential backoff strategy for timing restart attempts.
+
+$ docker top <container-name>
+* which processes are running inside this container.
+
+$ docker run --rm --name auto-exit-test busybox:1.29 echo Hello World
+* --rm: will automatically remove the container as soon as it enters the exited state
+
+$ docker rm -vf $(docker ps -a -q)
+* A quick cleanup containers command.
+* -f: Force the removal of a running container (uses SIGKILL).
+* -v: Remove anonymous volumes associated with the container.
+* -vf: combined flag.
