@@ -1,0 +1,15 @@
+$ docker pull <repo-name>
+* Download an image from a registry.
+
+$ docker rmi <image-name>
+* Remove one or more images.
+
+$ docker save -o myfile.tar <image-name:tag>
+* Save one or more images to a tar archive (streamed to STDOUT by default).
+
+$ docker load –i myfile.tar
+* Load an image from a tar archive or STDIN.
+
+$ docker images
+* List images.
+* the -a flag, the list will include every installed intermediate image or layer.
