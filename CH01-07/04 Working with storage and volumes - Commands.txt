@@ -1,0 +1,38 @@
+$ docker run -d --name diaweb \
+--mount type=bind,src=${CONF_SRC},dst=${CONF_DST},readonly=true \
+--mount type=bind,src=${LOG_SRC},dst=${LOG_DST} \
+-p 80:80 \
+nginx:latest
+* --mount: specify mount points in container.
+* type=bind => bind mounts
+* src: the source location on the host file tree.
+* dst: the destination location on the container file tree.
+* type=tmpfs => In-memory starage
+* tmpfs-size=16k,tmpfs-mode=1770 => change size limit (default: no limit) and change the file mode
+* type=volume,src=<volume-name>,dst=/data 
+
+$ docker volume create \
+--driver local \ # default is local
+--label example=location \
+location-example
+* Create a volume.
+
+$ docker run -d \
+--volume cass-shared:/var/lib/cassandra/data \ # Specifying the volume name is optional.
+--name cass1 \
+cassandra:2.2
+* -v, --volume: Bind mount a volume (or volumes)
+* --volumes-from: That will copy the mount definitions from one or more containers to the new container.
+
+$ docker volume list
+* List volumes
+
+$ docker run --rm or docker rm -v
+* Remove anonymous volumes associated with the container.
+
+$ docker volume remove <volume-name>
+* Remove one or more volumes. No volume attached to any container in any state can be deleted.
+
+$ docker volume prune --filter example=cassandra
+* Remove unused local volumes.
+* We can filter them with lables we set.
