@@ -1,0 +1,28 @@
+$ docker container commit <container-name> <new-image-name>
+* create an image from a modified container.
+
+$ docker container diff <container-name>
+* all the filesystem changes that have been made inside a container.
+* changes => A (Added) C (Changed) D (Deleted)
+* -a Author String
+* -m Commit Message
+
+$ docker tag <repo-name-or-ID> <new-repo-name>
+* If you want to copy an image, you need only to create a new tag or repository from the existing one.
+
+$ docker image ls
+* Examines image sizes.
+
+$ docker image history <image-name>
+* examine all the layers in an image.
+
+$ docker image save
+* You can flatten images by saving the image to a TAR file.
+
+$ docker image import
+* Importing the contents of that filesystem back into Docker (Make an image from the TAR file.).
+
+$ docker container run --name=healthcheck_ex -d \
+--health-cmd='nc -vz -w 2 localhost 80 || exit 1' \
+nginx:1.13-alpine
+* set on the command-line when running a container.
