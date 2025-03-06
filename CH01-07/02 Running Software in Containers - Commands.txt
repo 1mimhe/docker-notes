@@ -14,6 +14,7 @@ busybox:1.29 /bin/sh
 * --link: is a legacy feature of Docker. It may eventually be removed.
 * --link <name or id>:alias: Where name is the name of the container we're linking to and alias is an alias for the link name. That alias is used shortly. Alias isn't required.
 * The link is unidirectional. Just The source container can access the target container.
+* -w, --workdir: Working directory inside the container.
 
 $ docker run -d -P training/webapp python app.py
 * -P: was used to automatically map any network port inside it to a random high port within an ephemeral port range on your Docker host. Ex: 49155->5000
@@ -66,7 +67,8 @@ $ docker top <container-name>
 * which processes are running inside this container.
 
 $ docker run --rm --name auto-exit-test busybox:1.29 echo Hello World
-* --rm: will automatically remove the container as soon as it enters the exited state
+* --rm: will automatically remove the container as soon as it enters the exited state.
+* It also removes anonymous volumes associated with the container.
 
 $ docker rm -vf $(docker ps -a -q)
 * A quick cleanup containers command.
