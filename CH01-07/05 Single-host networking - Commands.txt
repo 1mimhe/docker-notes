@@ -1,0 +1,56 @@
+$ docker network ls
+* prints a table of all the networks to the terminal.
+
+$ docker network create \
+--driver bridge \
+--label project=dockerinaction \ # just metadata
+--label chapter=5 \
+--attachable \ # allows you to attach and detach containers to the network
+--scope local \ # default value
+--subnet 10.0.42.0/24 \
+--ip-range 10.0.42.128/25 \
+user-network
+* build a new network with a single command.
+
+$ docker run -it \
+--network user-network \
+--name network-explorer \
+alpine:3.8 \
+sh
+* creating a new container attached to the network.
+
+$ ip -f inet -4 -o addr
+* Get a list of the IPv4 addresses available in the container.
+
+$ docker network connect \
+user-network2 \ # Network name
+network-explorer # Target container name
+* attach the network to a container still running.
+
+$ docker attach network-explorer
+* reattach our terminal (When containers are run with the interactive option -it).
+
+$ docker run --rm \
+-p 8080 \ # or more
+alpine:3.8
+* the host operating system will select a random host port, and traffic will be routed to port 8080 in the container.
+* [0.0.0.0]:[8080]:8080/[tcp] => the host interface, the port on the host to forward, the target port, and the port protocol.
+
+$ docker port <container-name> [<container-port/protocol>]
+* see the ports forwarded to any given container.
+* also available in summary:
+$ docker ps
+
+$ docker run --rm \
+--hostname barker \
+alpine:3.8 \
+nslookup barker
+
+$ docker run --rm \
+--dns-search docker.com \
+--dns 1.1.1.1 \
+alpine:3.8 cat /etc/resolv.conf
+# Will display contents that look like:
+# search docker.com
+# nameserver 1.1.1.1
+
