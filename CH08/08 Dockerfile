@@ -1,0 +1,48 @@
+FROM ubuntu:latest
+# Tells Docker to start from the latest Ubuntu image (Base Image).
+# multistage Dockerfile:
+# The build stage is named by appending 'AS <name>'.
+RUN apt-get update && apt-get install -y git
+# Tells the builder to run the provided commands to install Git.
+ENTRYPOINT ["git"]
+# Sets the entrypoint for the image to git.
+ENV APPROOT="/app" \
+APP="mailer.sh" \
+VERSION="0.6"
+# sets environment variables for an image.
+LABEL base.name="Mailer Archetype" \
+base.version="${VERSION}"
+# is used to define key/value pairs that are recorded as additional
+# metadata for an image or container.
+WORKDIR $APPROOT
+# sets the default working directory.
+# sets that for any RUN, CMD, ENTRYPOINT, COPY and ADD instructions.
+ADD . $APPROOT
+# operates similarly to the COPY instruction, but:
+# fetch remote source files if a URL is specified (isn't a good practice)
+# extract the files of any source determined to be an archive file.
+EXPOSE 33333
+# creates a layer that opens TCP port 33333.
+# it needs port bindings too.
+# use it as documentation.
+COPY ["./log-impl", "${APPROOT}"]
+# will copy files from the filesystem where the image is being built,
+# into the build container.
+# --from=<name|index>: identify the source layer
+# for files brought into the image build.
+VOLUME ["/var/log"]
+# Each value in the string array argument will be created
+# as a new volume definition in the resulting layer.
+# use it as documentation.
+CMD ["/var/log/mailer.log"]
+# represents an argument list for the entrypoint.
+ONBUILD COPY [".", "/var/myapp"]
+ONBUILD RUN go build /var/myapp
+# defines other instructions to execute
+# if the resulting image is used as a base for another build.
+#########################################################
+ARG VERSION=unknown
+# defines a variable that users can provide to Docker when building an image.
+# pass it with --build-arg <varname>=<value> in docker build.
+# if you had not specified VERSION as a build argument,
+# the default value would be used.

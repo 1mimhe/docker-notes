@@ -1,0 +1,6 @@
+$ docker image build --tag <repo-name> --target <stage-name> <Dockerfile-Path>
+* also can use -f (--file) for set Dockerfile name (Dockerfile is default).
+* -q => quiet flag
+* --build-arg <varname>=<value>: pass args.
+* --target: Set the target build stage to build.
+* --tag, -t: Name and optionally a tag.

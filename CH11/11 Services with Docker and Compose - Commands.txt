@@ -1,0 +1,36 @@
+$  docker swarm init [--advertise-addr 172.25.58.156]
+* Initialize a swarm that enables the service abstraction.
+* If you have multiple interfaces, you should set the advertise address.
+
+$ docker service => Manage Swarm services
+
+$ docker service create \
+--publish 8080:80 \
+--name hello-world \
+--replicas 3 \
+<image-name>
+* Create and start a service on localhost:8080
+
+$ docker service ls
+* List services.
+
+$ docker service ps <service-name>
+* same as docker container ps
+* List the tasks of one or more services.
+
+$ docker service inspect <service-name>
+* Display detailed information on one or more services.
+
+$ docker service scale SERVICE=REPLICAS
+* Scale one or multiple replicated services.
+
+$ docker service remove <service-name>
+* Remove one or more services.
+
+$ docker stack deploy -c databases.yml <stack-name>
+* Deploy a new stack or update an existing stack.
+* -c, --compose-file => Path to a Compose file, or "-" to read from stdin.
+* --prune => Prune services that are no longer referenced.
+
+$ docker stack ps <stack-name>
+* List the tasks in the stack.
